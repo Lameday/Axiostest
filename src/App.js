@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import axios from 'axios'
+import * as AxiosLogger from 'axios-logger';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+let log = [[],[]];
+const test = true
+
+if(test) {
+  axios.interceptors.request.use( req => {if(req) {
+    log[0].push(req)
+    return req
+  } else {
+    log[0].push('Request Fail')
+    return req
+  }})
+  axios.interceptors.response.use( res => {if(res) {
+    log[1].push(res)
+    return res
+  } else {
+    log[1].push(res)
+    return res
+  }})
 }
 
-export default App;
+export default function App() {
+    const [users, setUsers] = useState([])
+    
+    const handleClick = () => {
+        axios.get('https://jsonplaceholder.typicode.com/users')
+        .then((response) => setUsers(response.data))
+        .catch((err) => console.log(err))
+        console.log(log)
+    }
+
+      return (
+          <div>
+              <button onClick={handleClick}> Fetch </button>
+              {users.map((user) => {return (<h2 key={user.id}>{user.name} {user.email}</h2>);
+              })}
+          </div>
+        )
+      }
