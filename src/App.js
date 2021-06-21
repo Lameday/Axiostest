@@ -1,32 +1,24 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import * as AxiosLogger from 'axios-logger';
 
 let log = [[],[]];
-const test = true
-
-if(test) {
-  axios.interceptors.request.use( req => {if(req) {
+if(true) {
+  axios.interceptors.request.use( req => {
     log[0].push(req)
     return req
-  } else {
-    log[0].push('Request Fail')
-    return req
-  }})
-  axios.interceptors.response.use( res => {if(res) {
+  })
+
+  axios.interceptors.response.use( res => {
     log[1].push(res)
     return res
-  } else {
-    log[1].push(res)
-    return res
-  }})
+  })
 }
 
 export default function App() {
     const [users, setUsers] = useState([])
     
     const handleClick = () => {
-        axios.get('https://jsonplaceholder.typicode.com/users')
+        axios.get('https://jsonplaceholder.typicode.com/ddd')
         .then((response) => setUsers(response.data))
         .catch((err) => console.log(err))
         console.log(log)
